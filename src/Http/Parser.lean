@@ -54,27 +54,11 @@ def userInfoParser : Parsec UserInfo := do
 
 partial def queryParser : Parsec Query := do
   skipChar '?'
-  let rec entries := do
-    let k ← psegment
-    skipChar '='
-    let v ← psegment
-    if ← test $ skipChar '&' then
-      pure <| (k, v) :: (← entries)
-    else
-      pure [(k, v)]
-  entries
+  manyChars <| satisfy (· ≠ '#')
 
 partial def fragmentParser : Parsec Fragment := do
   skipChar '#'
-  let rec entries := do
-    let k ← psegment
-    skipChar '='
-    let v ← psegment
-    if ← test $ skipChar '&' then
-      pure <| (k, v) :: (← entries)
-    else
-      pure [(k, v)]
-  entries
+  rest
 
 def uri : Parsec Uri := do  
   let scheme ← schemeParser

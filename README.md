@@ -33,7 +33,6 @@ def main : IO Unit :=
 
 # Features TODO
 
-[] Parsing and sanitizing special characters in Uris
-[] Https and OpenSSL.lean integration
-[] Simple server functionality
-[] Add doc-gen4
+- [ ] Parsing and sanitizing special characters in Uris
+- [ ] Https and OpenSSL.lean integration
+- [ ] Add doc-gen4

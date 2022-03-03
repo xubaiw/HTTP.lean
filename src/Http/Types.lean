@@ -26,15 +26,15 @@ structure UserInfo where
 instance : ToString UserInfo where
   toString ui := ""
 
-def Fragment := List (String × String)
+def Fragment := String
+ deriving BEq
 
-instance : ToString Fragment where
-  toString (q : Fragment) := "#" ++ ("&".intercalate <| q.map (λ (k, v) => s!"{k}={v}"))
+deriving instance ToString for Fragment
 
-def Query := List (String × String)
+def Query := String
+ deriving BEq
 
-instance : ToString Query where
-  toString (q : Query) := "?" ++ ("&".intercalate <| q.map (λ (k, v) => s!"{k}={v}"))
+deriving instance ToString for Query
 
 end Uri
 
