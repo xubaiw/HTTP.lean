@@ -10,14 +10,14 @@ def main (args : List String) : IO UInt32 := do
     let ssl ← ctx.initSSL
     
     match args with
-    | [ "--get", surl ] => do
-      let url ← IO.ofExcept <| Url.parse surl
-      let response ← Client.get url
+    | [ "--get", suri ] => do
+      let uri ← IO.ofExcept <| Uri.parse suri
+      let response ← Client.get uri
       println! "headers : {response.headers}"
       println! "body: {response.body}"
-    | [ "--post", surl, body ] => do
-      let url ← IO.ofExcept <| Url.parse surl
-      let response ← Client.post url body
+    | [ "--post", suri, body ] => do
+      let uri ← IO.ofExcept <| Uri.parse suri
+      let response ← Client.post uri body
       println! "headers : {response.headers}"
       println! "body: {response.body}"
     | unknown => println! "Unknown arguments {unknown}"

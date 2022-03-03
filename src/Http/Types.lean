@@ -1,7 +1,7 @@
 import Std
 namespace Http
 
-namespace Url
+namespace Uri
 
 def Hostname := String
 
@@ -36,11 +36,11 @@ def Query := List (String × String)
 instance : ToString Query where
   toString (q : Query) := "?" ++ ("&".intercalate <| q.map (λ (k, v) => s!"{k}={v}"))
 
-end Url
+end Uri
 
-open Url
+open Uri
 
-structure Url where
+structure Uri where
   userInfo : Option UserInfo
   host: Hostname
   port: Option UInt16
@@ -99,7 +99,7 @@ def Protocol.toString : Protocol → String
   | other name v => s!"{name.capitalize}/{v}"
 
 open Protocol in
-def Url.Scheme.asProtocol (s : Scheme) : Protocol :=
+def Uri.Scheme.asProtocol (s : Scheme) : Protocol :=
   match ToString.toString s with
   | "http" => http "1.1"
   | "https" => https "1.2"
@@ -114,7 +114,7 @@ Meta information for Requests and Responses.
 def Headers := Std.HashMap CaseInsString String
 
 structure Request where
-  url : Url
+  uri : Uri
   protocol : Protocol
   method : Method
   headers : Headers

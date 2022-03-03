@@ -2,7 +2,7 @@ import Http.Types
 import Http.Parsec
 import Std.Data.HashMap
 
-open Parsec Std Http.Url
+open Parsec Std Http.Uri
 
 namespace Http.Parser
 
@@ -43,14 +43,8 @@ def psegment : Parsec String :=
   many1Chars <| oneOf ['-', '%', '_', '+', '$', '.', ':', '*', '@' ] <|> asciiLetter <|> digit
 
 partial def pathParser : Parsec Path := do
-  let rec comp : Parsec Path := do
-    if ← test <| pstring "/" then
-      let part ← psegment
-      let rest ← comp
-      pure <| part :: rest
-    else
-      pure []
-  comp
+  let pathString ← many1Chars <| oneOf ['-', '%', '_', '+', '$', '.', ':', '*', '@', '/'] <|> asciiLetter <|> digit
+  return pathString.splitOn "/" |>.filter (fun s => s.length ≠ 0)
 
 def userInfoParser : Parsec UserInfo := do
   let username ← many1Chars <| asciiLetter <|> digit
@@ -82,7 +76,7 @@ partial def fragmentParser : Parsec Fragment := do
       pure [(k, v)]
   entries
 
-def url : Parsec Url := do  
+def uri : Parsec Uri := do  
   let scheme ← schemeParser
   skipString "://"
   let userInfo ← option userInfoParser
@@ -91,13 +85,13 @@ def url : Parsec Url := do
   let path ← pathParser
   let query ← option queryParser
   let fragment ← option fragmentParser
-  return { scheme, host, port := optPort, path, query, fragment, userInfo : Url }
+  return { scheme, host, port := optPort, path, query, fragment, userInfo : Uri }
 
-def relativeUrl (baseUrl : Url) : Parsec Url := do  
+def relativeUri (baseUri : Uri) : Parsec Uri := do  
   let path ← pathParser
   let query ← option queryParser
   let fragment ← option fragmentParser
-  return { baseUrl with path, query, fragment }
+  return { baseUri with path, query, fragment }
 
 def header : Parsec (CaseInsString × String) := do
   let key ← many1Chars (asciiLetter <|> pchar '-')
@@ -157,10 +151,10 @@ def response : Parsec Response := do
     statusCode,
   }
 
-def request (baseUrl : Url) : Parsec Request := do
+def request (baseUri : Uri) : Parsec Request := do
   let method ← method
   ws
-  let url ← relativeUrl baseUrl
+  let uri ← relativeUri baseUri
   ws
   let protocol ← protocol
   ws
@@ -168,7 +162,7 @@ def request (baseUrl : Url) : Parsec Request := do
   let body ← rest
   return {
     method,
-    url,
+    uri,
     protocol,
     headers,
     body := some body,

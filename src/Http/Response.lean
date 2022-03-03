@@ -7,9 +7,11 @@ namespace Http.Response
 def parse (s : String) : Except String Response := Parser.response.parse s
 
 def toResponseString (r : Response) : String :=
-  s!"{r.protocol.toString} {r.statusCode} {r.message}" ++ crlf ++
+  s!"{r.protocol.toString} {r.statusCode} {r.message}" ++
+  crlf ++
   r.headers.toRequestFormat ++
-  crlf ++ crlf ++
-  if let some body := r.body then body else ""
+  crlf ++
+  (if let some body := r.body then body else "" ) ++
+  crlf ++ crlf
 
 end Http.Response

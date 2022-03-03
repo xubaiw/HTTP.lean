@@ -1,5 +1,5 @@
 import Http.Types
-import Http.Url
+import Http.Uri
 import Http.Request
 import Http.Response
 import Http.Headers
@@ -11,10 +11,10 @@ namespace Http
 
 namespace Client
 
-def request (method : Method)  (url : Url) (body : Option String) : IO Response := do
+def request (method : Method)  (uri : Uri) (body : Option String) : IO Response := do
   try
-    let headers := Headers.fromList [("Host", url.host)]
-    let request := Request.init url method headers body
+    let headers := Headers.fromList [("Host", uri.host)]
+    let request := Request.init uri method headers body
     let text ← String.fromUTF8Unchecked <$> liftM request.send
     match Response.parse text with
     | Except.ok response => return response
@@ -22,11 +22,11 @@ def request (method : Method)  (url : Url) (body : Option String) : IO Response 
   catch e =>
     throw <| IO.Error.userError s!"Request failed: {e}"
 
-def get (url : Url) : IO Response :=
-  request Method.get url none
+def get (uri : Uri) : IO Response :=
+  request Method.get uri none
 
-def post (url : Url) (body : String) : IO Response :=
-  request Method.post url none
+def post (uri : Uri) (body : String) : IO Response :=
+  request Method.post uri none
 
 end Client
 
@@ -37,7 +37,7 @@ def serve (port : UInt16) (handler : Request → IO Response) : IO Unit := do
   socket.bind localAddr
   socket.listen 5
 
-  let baseUrl := {
+  let baseUri := {
     userInfo := none
     host := "localhost"
     port := port
@@ -50,13 +50,14 @@ def serve (port : UInt16) (handler : Request → IO Response) : IO Unit := do
   repeat do
     let (remoteAddr, socket') ← socket.accept
     let recv ← String.fromUTF8Unchecked <$> socket'.recv 5000
-    if let Except.ok request := Request.parse baseUrl recv then
+    
+    match Request.parse baseUri recv with
+    | Except.ok request =>
       let response ← handler request
       -- TODO: add logging
       discard <| socket'.send response.toResponseString.toUTF8
-    -- TODO: handle HTTP request error handling
-    else
-      IO.println s!"Invalid request: {recv}"
+    | Except.error e =>
+      IO.println s!"Error: {e}"
     socket'.close
     
 end Http
