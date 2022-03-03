@@ -7,7 +7,7 @@ package Http {
   dependencies := #[
     {
       name := `socket
-      src := Source.git "https://github.com/xubaiw/Socket.lean" "e2b40341017eacd03d006630e6f863ab7c1ede9f"
+      src := Source.git "https://github.com/xubaiw/Socket.lean" "752eadc681a3a4f967d4263c057fe41b851c9d2d"
     }
   ]
 }

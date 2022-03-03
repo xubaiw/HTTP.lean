@@ -29,13 +29,11 @@ def send (request : Request) : IO ByteArray := do
     | http _ => 80
     | https _ => 443
     | _ => 80
-  let remoteAddr ← SockAddr.mk {
-    host := request.url.host
-    port := request.url.port.getD defaultPort |> ToString.toString
-    family := inet
-    type := stream
-  }
-  let socket ← Socket.mk inet stream
+  let host := request.url.host
+  let port := request.url.port.getD defaultPort |> ToString.toString
+
+  let remoteAddr ← SockAddr.mk host port AddressFamily.inet SockType.stream
+  let socket ← Socket.mk AddressFamily.inet SockType.stream
   socket.connect remoteAddr
   let strSend := request.toRequestString
   let bytesSend ← socket.send strSend.toUTF8
