@@ -1,13 +1,13 @@
 import Http.Types
 import Http.Headers
-import Http.URI
+import Http.Url
 import Socket
 
 namespace Http.Request
 
 open Socket
 
-def init (url : URI) (method : Method) (headers : Headers) (body : Option String) : Request :=
+def init (url : Url) (method : Method) (headers : Headers) (body : Option String) : Request :=
   {
     url,
     method,

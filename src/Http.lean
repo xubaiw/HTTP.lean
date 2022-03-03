@@ -1,5 +1,5 @@
 import Http.Types
-import Http.URI
+import Http.Url
 import Http.Request
 import Http.Response
 import Http.Headers
@@ -8,7 +8,7 @@ namespace Http
 
 namespace Client
 
-def request (method : Method)  (url : URI) (body : Option String) : IO Response := do
+def request (method : Method)  (url : Url) (body : Option String) : IO Response := do
   try
     let headers := Headers.fromList [("Host", url.host)]
     let request := Request.init url method headers body
@@ -19,10 +19,10 @@ def request (method : Method)  (url : URI) (body : Option String) : IO Response 
   catch e =>
     throw <| IO.Error.userError s!"Request failed: {e}"
 
-def get (url : URI) : IO Response :=
+def get (url : Url) : IO Response :=
   request Method.GET url none
 
-def post (url : URI) (body : String) : IO Response :=
+def post (url : Url) (body : String) : IO Response :=
   request Method.POST url none
 
 end Client

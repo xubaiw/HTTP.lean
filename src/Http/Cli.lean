@@ -11,12 +11,12 @@ def main (args : List String) : IO UInt32 := do
     
     match args with
     | [ "--get", surl ] => do
-      let url ← IO.ofExcept <| URI.parse surl
+      let url ← IO.ofExcept <| Url.parse surl
       let response ← Client.get url
       println! "headers : {response.headers}"
       println! "body: {response.body}"
     | [ "--post", surl, body ] => do
-      let url ← IO.ofExcept <| URI.parse surl
+      let url ← IO.ofExcept <| Url.parse surl
       let response ← Client.post url body
       println! "headers : {response.headers}"
       println! "body: {response.body}"

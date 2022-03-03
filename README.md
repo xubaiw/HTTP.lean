@@ -23,7 +23,7 @@ open Http
 
 def main : IO Unit :=
   -- Supports (basic) URL parsing
-  let url ← URI.parse "http://www.example.com"
+  let url ← Url.parse "http://www.example.com"
   let response ← Client.get url
   if let some body := response.body then
     println! body
@@ -33,7 +33,7 @@ def main : IO Unit :=
 
 # Features TODO
 
-[] Parsing and sanitizing special characters in URIs
+[] Parsing and sanitizing special characters in Urls
 [] Https and OpenSSL.lean integration
 [] Simple server functionality
 [] Add doc-gen4

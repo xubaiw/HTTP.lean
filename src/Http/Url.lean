@@ -7,22 +7,22 @@ open Std Parsec Socket
 
 namespace Http
 
-namespace URI
+namespace Url
 
-private def toString (uri : URI) : String :=
-  s!"{uri.scheme}://"
-  ++ if let some user := uri.userInfo then s!"{user}@"
+private def toString (url : Url) : String :=
+  s!"{url.scheme}://"
+  ++ if let some user := url.userInfo then s!"{user}@"
   else ""
-  ++ s!"{uri.host}"
-  ++ if let some port := uri.port then s!":{port}"
+  ++ s!"{url.host}"
+  ++ if let some port := url.port then s!":{port}"
   else ""
-  ++ s!"{uri.path}"
-  ++ if let some query := uri.query then s!"?{query}"
+  ++ s!"{url.path}"
+  ++ if let some query := url.query then s!"?{query}"
   else ""
-  ++ if let some fragment := uri.fragment then s!"#{fragment}"
+  ++ if let some fragment := url.fragment then s!"#{fragment}"
   else ""
 
-instance : ToString URI := ⟨toString⟩
+instance : ToString Url := ⟨toString⟩
 
 namespace Parser
 
@@ -102,7 +102,7 @@ partial def fragmentParser : Parsec Fragment := do
       pure [(k, v)]
   entries
 
-def url : Parsec URI := do  
+def url : Parsec Url := do  
   let scheme ← schemeParser
   skipString "://"
   let userInfo ← option userInfoParser
@@ -111,11 +111,11 @@ def url : Parsec URI := do
   let path ← pathParser
   let query ← option queryParser
   let fragment ← option fragmentParser
-  return { scheme, host, port := optPort, path, query, fragment, userInfo : URI }
+  return { scheme, host, port := optPort, path, query, fragment, userInfo : Url }
 
 end Parser
 
-def parse (s : String) : Except String URI := Parser.url.parse s
+def parse (s : String) : Except String Url := Parser.url.parse s
 
-end URI
+end Url
 end Http
