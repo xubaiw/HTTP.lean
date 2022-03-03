@@ -12,7 +12,7 @@ instance : ToString Headers where
   toString := Headers.toString
   
 def toRequestFormat (h : Headers) : String :=
-  h.fold (λ acc a b => acc ++ s!"{a}: {b}" ++ CRLF) ""
+  h.fold (λ acc a b => acc ++ s!"{a}: {b}" ++ crlf) ""
 
 def set (self : Headers) (name : CaseInsString) (value : String) : Headers :=
   self.insert name value

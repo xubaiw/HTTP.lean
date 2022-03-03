@@ -17,9 +17,9 @@ def init (url : Url) (method : Method) (headers : Headers) (body : Option String
   }
 
 def toRequestString (r : Request) : String :=
-  s!"{r.method} {r.url.path} {r.protocol.toString}" ++ CRLF ++
+  s!"{r.method} {r.url.path} {r.protocol.toString}" ++ crlf ++
   r.headers.toRequestFormat ++
-  CRLF ++ CRLF ++
+  crlf ++ crlf ++
   if let some body := r.body then body else ""
   
 open Protocol in

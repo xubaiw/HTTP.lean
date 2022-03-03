@@ -20,10 +20,10 @@ def request (method : Method)  (url : Url) (body : Option String) : IO Response 
     throw <| IO.Error.userError s!"Request failed: {e}"
 
 def get (url : Url) : IO Response :=
-  request Method.GET url none
+  request Method.get url none
 
 def post (url : Url) (body : String) : IO Response :=
-  request Method.POST url none
+  request Method.post url none
 
 end Client
 

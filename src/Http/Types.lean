@@ -49,7 +49,7 @@ structure Url where
   query: Option Query
   fragment: Option Fragment
 
-def CRLF : String := "\r\n"
+def crlf : String := "\r\n"
 
 /--
 A Case insensitive String with case insensitive BEq and Hashable instances.
@@ -64,26 +64,26 @@ instance caseInsensitiveStringHashable : Hashable CaseInsString where
   hash s := s.capitalize.hash
 
 inductive Method
-  | GET
-  | HEAD
-  | POST
-  | PUT
-  | DELETE
-  | CONNECT
-  | OPTIONS
-  | TRACE
-  | PATCH
+  | get
+  | head
+  | post
+  | put
+  | delete
+  | connect
+  | options
+  | trace
+  | patch
 
 def Method.toString: Method → String
-  | GET => "GET"
-  | HEAD => "HEAD"
-  | POST => "POST"
-  | PUT  => "PUT"
-  | DELETE => "DELETE"
-  | CONNECT => "CONNECT"
-  | OPTIONS => "OPTIONS"
-  | TRACE => "TRACE"
-  | PATCH => "PATCH"
+  | get => "GET"
+  | head => "HEAD"
+  | post => "POST"
+  | put  => "PUT"
+  | delete => "DELETE"
+  | connect => "CONNECT"
+  | options => "OPTIONS"
+  | trace => "TRACE"
+  | patch => "PATCH"
 
 instance : ToString Method where
   toString := Method.toString
