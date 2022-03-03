@@ -14,4 +14,13 @@ def toResponseString (r : Response) : String :=
   (if let some body := r.body then body else "" ) ++
   crlf ++ crlf
 
+instance : Coe String Response where
+  coe s := {
+    statusCode := 200
+    message := "OK"
+    protocol := Protocol.http "1.1"
+    headers := Headers.fromList [("Content-Length", toString s.bsize)]
+    body := s
+  }
+
 end Http.Response
