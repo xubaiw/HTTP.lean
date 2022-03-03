@@ -40,4 +40,6 @@ def send (request : Request) : IO ByteArray := do
   let bytesRecv ← socket.recv 5000
   return bytesRecv
 
+def parse (baseUrl : Url) (s : String) : Except String Request := (Parser.request baseUrl).parse s
+
 end Http.Request

@@ -3,6 +3,9 @@ import Http.Url
 import Http.Request
 import Http.Response
 import Http.Headers
+import Socket
+
+open Socket
 
 namespace Http
 
@@ -27,4 +30,33 @@ def post (url : Url) (body : String) : IO Response :=
 
 end Client
 
+def serve (port : UInt16) (handler : Request → IO Response) : IO Unit := do
+  -- bind
+  let localAddr ← SockAddr.mk "localhost" "8080" AddressFamily.inet SockType.stream
+  let socket ← Socket.mk AddressFamily.inet SockType.stream
+  socket.bind localAddr
+  socket.listen 5
+
+  let baseUrl := {
+    userInfo := none
+    host := "localhost"
+    port := port
+    scheme := "http"
+    path := []
+    query := none
+    fragment := none
+  }
+  -- serving
+  repeat do
+    let (remoteAddr, socket') ← socket.accept
+    let recv ← String.fromUTF8Unchecked <$> socket'.recv 5000
+    if let Except.ok request := Request.parse baseUrl recv then
+      let response ← handler request
+      -- TODO: add logging
+      discard <| socket'.send response.toResponseString.toUTF8
+    -- TODO: handle HTTP request error handling
+    else
+      IO.println s!"Invalid request: {recv}"
+    socket'.close
+    
 end Http

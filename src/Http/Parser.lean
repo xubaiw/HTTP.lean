@@ -93,6 +93,12 @@ def url : Parsec Url := do
   let fragment ← option fragmentParser
   return { scheme, host, port := optPort, path, query, fragment, userInfo : Url }
 
+def relativeUrl (baseUrl : Url) : Parsec Url := do  
+  let path ← pathParser
+  let query ← option queryParser
+  let fragment ← option fragmentParser
+  return { baseUrl with path, query, fragment }
+
 def header : Parsec (CaseInsString × String) := do
   let key ← many1Chars (asciiLetter <|> pchar '-')
   ws
@@ -151,10 +157,10 @@ def response : Parsec Response := do
     statusCode,
   }
 
-def request : Parsec Request := do
+def request (baseUrl : Url) : Parsec Request := do
   let method ← method
   ws
-  let url ← url
+  let url ← relativeUrl baseUrl
   ws
   let protocol ← protocol
   ws
