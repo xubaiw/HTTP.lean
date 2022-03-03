@@ -1,5 +1,4 @@
 import Http.Types
-import Http.Parsec
 import Std
 
 namespace Http.Headers
@@ -23,24 +22,4 @@ def merge (a b : Headers) : Headers :=
 def fromList (l : List (CaseInsString × String)) : Headers :=
   l.foldl (λ h (n, v) => h.set n v) HashMap.empty
 
-namespace Parser
-
-open Parsec
-
-def header : Parsec (CaseInsString × String) := do
-  let key ← many1Chars (asciiLetter <|> pchar '-')
-  ws
-  skipChar ':'
-  ws  
-  let value ← manyChars <| satisfy (λ c => c != '\n')
-  ws
-  return (key, value)
-
-def headers : Parsec Headers := do
-  let headers : HashMap CaseInsString String
-    ← Array.foldl (λ map (k ,v) => map.insert k v) HashMap.empty <$> (many header)
-  ws
-  return headers
-
-end Parser
 end Http.Headers
