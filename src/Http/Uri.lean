@@ -9,7 +9,7 @@ namespace HTTP
 
 namespace URI
 
-private def toString (uri : URI) : String :=
+def toString (uri : URI) : String :=
   s!"{uri.scheme}://"
   ++ if let some user := uri.userInfo then s!"{user}@"
   else ""
