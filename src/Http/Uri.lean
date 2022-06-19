@@ -7,9 +7,9 @@ open Std Parsec Socket
 
 namespace HTTP
 
-namespace Uri
+namespace URI
 
-private def toString (uri : Uri) : String :=
+private def toString (uri : URI) : String :=
   s!"{uri.scheme}://"
   ++ if let some user := uri.userInfo then s!"{user}@"
   else ""
@@ -22,9 +22,9 @@ private def toString (uri : Uri) : String :=
   ++ if let some fragment := uri.fragment then s!"#{fragment}"
   else ""
 
-instance : ToString Uri := ⟨toString⟩
+instance : ToString URI := ⟨toString⟩
 
-def parse (s : String) : Except String Uri := Parser.uri.parse s
+def parse (s : String) : Except String URI := Parser.uri.parse s
 
-end Uri
+end URI
 end HTTP

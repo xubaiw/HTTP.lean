@@ -2,7 +2,7 @@ import HTTP.Types
 import HTTP.Parsec
 import Std.Data.HashMap
 
-open Parsec Std HTTP.Uri
+open Parsec Std HTTP.URI
 
 namespace HTTP.Parser
 
@@ -60,7 +60,7 @@ partial def fragmentParser : Parsec Fragment := do
   skipChar '#'
   rest
 
-def uri : Parsec Uri := do  
+def uri : Parsec URI := do  
   let scheme ← schemeParser
   skipString "://"
   let userInfo ← option userInfoParser
@@ -69,13 +69,13 @@ def uri : Parsec Uri := do
   let path ← pathParser
   let query ← option queryParser
   let fragment ← option fragmentParser
-  return { scheme, host, port := optPort, path, query, fragment, userInfo : Uri }
+  return { scheme, host, port := optPort, path, query, fragment, userInfo : URI }
 
-def relativeUri (baseUri : Uri) : Parsec Uri := do  
+def relativeURI (baseURI : URI) : Parsec URI := do  
   let path ← pathParser
   let query ← option queryParser
   let fragment ← option fragmentParser
-  return { baseUri with path, query, fragment }
+  return { baseURI with path, query, fragment }
 
 def header : Parsec (CaseInsString × String) := do
   let key ← many1Chars (asciiLetter <|> pchar '-')
@@ -135,10 +135,10 @@ def response : Parsec Response := do
     statusCode,
   }
 
-def request (baseUri : Uri) : Parsec Request := do
+def request (baseURI : URI) : Parsec Request := do
   let method ← method
   ws
-  let uri ← relativeUri baseUri
+  let uri ← relativeURI baseURI
   ws
   let protocol ← protocol
   ws

@@ -1,7 +1,7 @@
 import Std
 namespace HTTP
 
-namespace Uri
+namespace URI
 
 def Hostname := String
 
@@ -24,7 +24,7 @@ structure UserInfo where
   password : Option String
 
 instance : ToString UserInfo where
-  toString ui := ""
+  toString _ui := ""
 
 def Fragment := String
  deriving BEq
@@ -36,11 +36,11 @@ def Query := String
 
 deriving instance ToString for Query
 
-end Uri
+end URI
 
-open Uri
+open URI
 
-structure Uri where
+structure URI where
   userInfo : Option UserInfo
   host: Hostname
   port: Option UInt16
@@ -99,7 +99,7 @@ def Protocol.toString : Protocol → String
   | other name v => s!"{name.capitalize}/{v}"
 
 open Protocol in
-def Uri.Scheme.asProtocol (s : Scheme) : Protocol :=
+def URI.Scheme.asProtocol (s : Scheme) : Protocol :=
   match ToString.toString s with
   | "http" => http "1.1"
   | "https" => https "1.2"
@@ -114,7 +114,7 @@ Meta information for Requests and Responses.
 def Headers := Std.HashMap CaseInsString String
 
 structure Request where
-  uri : Uri
+  uri : URI
   protocol : Protocol
   method : Method
   headers : Headers

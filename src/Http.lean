@@ -1,5 +1,5 @@
 import HTTP.Types
-import HTTP.Uri
+import HTTP.URI
 import HTTP.Request
 import HTTP.Response
 import HTTP.Headers
@@ -11,7 +11,7 @@ namespace HTTP
 
 namespace Client
 
-def request (method : Method)  (uri : Uri) (body : Option String) : IO Response := do
+def request (method : Method)  (uri : URI) (body : Option String) : IO Response := do
   try
     let headers := Headers.fromList [("Host", uri.host)]
     let request := Request.init uri method headers body
@@ -22,10 +22,10 @@ def request (method : Method)  (uri : Uri) (body : Option String) : IO Response 
   catch e =>
     throw <| IO.Error.userError s!"Request failed: {e}"
 
-def get (uri : Uri) : IO Response :=
+def get (uri : URI) : IO Response :=
   request Method.get uri none
 
-def post (uri : Uri) (body : String) : IO Response :=
+def post (uri : URI) (_body : String) : IO Response :=
   request Method.post uri none
 
 end Client
@@ -37,7 +37,7 @@ def serve (port : UInt16) (handler : Request → IO Response) : IO Unit := do
   socket.bind localAddr
   socket.listen 5
 
-  let baseUri := {
+  let baseURI := {
     userInfo := none
     host := "localhost"
     port := port
@@ -48,10 +48,10 @@ def serve (port : UInt16) (handler : Request → IO Response) : IO Unit := do
   }
   -- serving
   repeat do
-    let (remoteAddr, socket') ← socket.accept
+    let (_remoteAddr, socket') ← socket.accept
     let recv ← String.fromUTF8Unchecked <$> socket'.recv 5000
     
-    match Request.parse baseUri recv with
+    match Request.parse baseURI recv with
     | Except.ok request =>
       let response ← handler request
       -- TODO: add logging

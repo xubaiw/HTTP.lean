@@ -1,13 +1,13 @@
 import HTTP.Types
 import HTTP.Headers
-import HTTP.Uri
+import HTTP.URI
 import Socket
 
 namespace HTTP.Request
 
 open Socket
 
-def init (uri : Uri) (method : Method) (headers : Headers) (body : Option String) : Request :=
+def init (uri : URI) (method : Method) (headers : Headers) (body : Option String) : Request :=
   {
     uri,
     method,
@@ -41,6 +41,6 @@ def send (request : Request) : IO ByteArray := do
   let bytesRecv ← socket.recv 5000
   return bytesRecv
 
-def parse (baseUri : Uri) (s : String) : Except String Request := (Parser.request baseUri).parse s
+def parse (baseURI : URI) (s : String) : Except String Request := (Parser.request baseURI).parse s
 
 end HTTP.Request
