@@ -1,13 +1,13 @@
-import Http.Types
-import Http.Uri
-import Http.Request
-import Http.Response
-import Http.Headers
+import HTTP.Types
+import HTTP.Uri
+import HTTP.Request
+import HTTP.Response
+import HTTP.Headers
 import Socket
 
 open Socket
 
-namespace Http
+namespace HTTP
 
 namespace Client
 
@@ -60,4 +60,4 @@ def serve (port : UInt16) (handler : Request → IO Response) : IO Unit := do
       IO.println s!"Error: {e}"
     socket'.close
     
-end Http
+end HTTP

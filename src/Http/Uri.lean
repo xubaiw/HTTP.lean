@@ -1,11 +1,11 @@
 import Std
-import Http.Parser
-import Http.Types
+import HTTP.Parser
+import HTTP.Types
 import Socket
 
 open Std Parsec Socket
 
-namespace Http
+namespace HTTP
 
 namespace Uri
 
@@ -27,4 +27,4 @@ instance : ToString Uri := ⟨toString⟩
 def parse (s : String) : Except String Uri := Parser.uri.parse s
 
 end Uri
-end Http
+end HTTP

@@ -1,7 +1,7 @@
-import Http.Types
+import HTTP.Types
 import Std
 
-namespace Http.Headers
+namespace HTTP.Headers
 open Std
 
 protected def toString (h : Headers) : String :=
@@ -22,4 +22,4 @@ def merge (a b : Headers) : Headers :=
 def fromList (l : List (CaseInsString × String)) : Headers :=
   l.foldl (λ h (n, v) => h.set n v) HashMap.empty
 
-end Http.Headers
+end HTTP.Headers

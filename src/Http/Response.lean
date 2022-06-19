@@ -1,8 +1,8 @@
-import Http.Types
-import Http.Headers
-import Http.Parser
+import HTTP.Types
+import HTTP.Headers
+import HTTP.Parser
 
-namespace Http.Response
+namespace HTTP.Response
 
 def parse (s : String) : Except String Response := Parser.response.parse s
 
@@ -19,8 +19,8 @@ instance : Coe String Response where
     statusCode := 200
     message := "OK"
     protocol := Protocol.http "1.1"
-    headers := Headers.fromList [("Content-Length", toString s.bsize)]
+    headers := Headers.fromList [("Content-Length", toString s.utf8ByteSize)]
     body := s
   }
 
-end Http.Response
+end HTTP.Response

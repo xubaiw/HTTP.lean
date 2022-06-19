@@ -1,9 +1,9 @@
-import Http.Types
-import Http.Headers
-import Http.Uri
+import HTTP.Types
+import HTTP.Headers
+import HTTP.Uri
 import Socket
 
-namespace Http.Request
+namespace HTTP.Request
 
 open Socket
 
@@ -43,4 +43,4 @@ def send (request : Request) : IO ByteArray := do
 
 def parse (baseUri : Uri) (s : String) : Except String Request := (Parser.request baseUri).parse s
 
-end Http.Request
+end HTTP.Request

@@ -1,9 +1,11 @@
 import Lake
 open Lake DSL
 
-package server {
-  dependencies := #[{
-    name := `Http
-    src := Source.path "../.."
-  }]
+package server
+
+require http from ".."/".."
+
+@[defaultTarget]
+lean_exe server {
+  root := `Main
 }

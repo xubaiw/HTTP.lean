@@ -1,6 +1,6 @@
-import Http
+import HTTP
 
-open Http Http.Uri
+open HTTP HTTP.Uri
 
 #eval Parser.hostName.parse "yatima.io"
 #eval Parser.pathParser.parse "/yatima.io/index.html"

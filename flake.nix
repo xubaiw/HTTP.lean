@@ -1,5 +1,5 @@
 {
-  description = "Http library for Lean";
+  description = "HTTP library for Lean";
 
   inputs = {
     lean = {
@@ -38,7 +38,7 @@
       let
         leanPkgs = lean.packages.${system};
         pkgs = nixpkgs.legacyPackages.${system};
-        name = "Http";  # must match the name of the top-level .lean file
+        name = "HTTP";  # must match the name of the top-level .lean file
         project = leanPkgs.buildLeanPackage {
           inherit name;
           deps = [ OpenSSL-lean.project.${system} Socket-lean.project.${system} ];
@@ -46,7 +46,7 @@
           src = ./src;
         };
         Cli = leanPkgs.buildLeanPackage {
-          name = "Http.Cli";
+          name = "HTTP.Cli";
           deps = [ project ];
           # Where the lean files are located
           src = ./src;

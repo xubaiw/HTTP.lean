@@ -1,8 +1,8 @@
-import Http
+import HTTP
 import OpenSSL
 
 open OpenSSL
-open Http
+open HTTP
 
 def main (args : List String) : IO UInt32 := do
   try

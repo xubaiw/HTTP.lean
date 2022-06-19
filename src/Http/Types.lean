@@ -1,5 +1,5 @@
 import Std
-namespace Http
+namespace HTTP
 
 namespace Uri
 
@@ -130,4 +130,4 @@ structure Response where
   headers : Headers
   body : Option String
 
-end Http
+end HTTP

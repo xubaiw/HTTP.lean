@@ -1,9 +1,11 @@
-import Http
+import HTTP
 
-open Http
+open HTTP
 
 def handler (req : Request) : IO Response := do
+  IO.println req.headers
   return "Hello, World!"
 
-def main : IO Unit :=
-  Http.serve 8080 handler
+def main : IO Unit := do
+  IO.println "serving at http://localhost:8080"
+  HTTP.serve 8080 handler

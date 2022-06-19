@@ -1,10 +1,10 @@
-import Http.Types
-import Http.Parsec
+import HTTP.Types
+import HTTP.Parsec
 import Std.Data.HashMap
 
-open Parsec Std Http.Uri
+open Parsec Std HTTP.Uri
 
-namespace Http.Parser
+namespace HTTP.Parser
 
 def schemeParser : Parsec Scheme :=
   Scheme.mk <$> manyChars (asciiLetter <|> oneOf ['+', '-', '.'])
@@ -152,4 +152,4 @@ def request (baseUri : Uri) : Parsec Request := do
     body := some body,
   }
 
-end Http.Parser
+end HTTP.Parser

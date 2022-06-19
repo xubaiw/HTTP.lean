@@ -1,4 +1,4 @@
-# Http basics for Lean
+# HTTP basics for Lean
 
 Uses [Socket.lean](https://github.com/xubaiw/Socket.lean) to create basic HTTP functionality. 
 
@@ -17,9 +17,9 @@ nix run . -- --get http://www.example.com
 A basic snippet to perform a GET request.
 
 ```lean
-import Http
+import HTTP
 
-open Http
+open HTTP
 
 def main : IO Unit :=
   -- Supports (basic) URL parsing
@@ -34,5 +34,5 @@ def main : IO Unit :=
 # Features TODO
 
 - [ ] Parsing and sanitizing special characters in Uris
-- [ ] Https and OpenSSL.lean integration
+- [ ] HTTPs and OpenSSL.lean integration
 - [ ] Add doc-gen4
